@@ -1,1 +1,29 @@
-<p>employee-details works!</p>
+<div class="container">
+    <mat-card class="employee-card">
+      <mat-card-header>
+        <mat-card-title>Employee Details</mat-card-title>
+        <mat-card-subtitle>View employee information</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="details-grid">
+          <p><strong>First Name:</strong> {{ employee?.first_name }}</p>
+          <p><strong>Last Name:</strong> {{ employee?.last_name }}</p>
+          <p><strong>Email:</strong> {{ employee?.email }}</p>
+          <p><strong>Gender:</strong> {{ employee?.gender }}</p>
+          <p><strong>Designation:</strong> {{ employee?.designation }}</p>
+          <p><strong>Salary:</strong> {{ employee?.salary | currency }}</p>
+          <p><strong>Date of Joining:</strong> {{ employee?.date_of_joining }}</p>
+          <p><strong>Department:</strong> {{ employee?.department }}</p>
+        </div>
+        <div class="photo" *ngIf="employee?.employee_photo">
+          <strong>Photo:</strong>
+          <img [src]="employee.employee_photo" alt="Employee Photo" />
+        </div>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-raised-button color="primary" routerLink="/employees">
+          <mat-icon>arrow_back</mat-icon> Back to List
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>

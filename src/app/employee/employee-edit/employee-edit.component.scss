@@ -1,0 +1,41 @@
+.employee-card {
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 20px;
+    background: white;
+  }
+  
+  mat-card-header {
+    display: block;
+    text-align: center;
+  }
+  
+  mat-card-title {
+    font-size: 24px;
+    font-weight: 500;
+    color: #3f51b5;
+  }
+  
+  mat-card-subtitle {
+    color: #666;
+  }
+  
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  
+  .file-upload {
+    margin: 20px 0;
+  }
+  
+  button {
+    margin-right: 10px;
+  }
+  
+  @media (max-width: 600px) {
+    .form-grid {
+      grid-template-columns: 1fr;
+    }
+  }

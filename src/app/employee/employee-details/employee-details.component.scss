@@ -1,0 +1,49 @@
+.employee-card {
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 20px;
+    background: white;
+  }
+  
+  mat-card-header {
+    display: block;
+    text-align: center;
+  }
+  
+  mat-card-title {
+    font-size: 24px;
+    font-weight: 500;
+    color: #3f51b5;
+  }
+  
+  mat-card-subtitle {
+    color: #666;
+  }
+  
+  .details-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-bottom: 20px;
+  }
+  
+  .details-grid p {
+    margin: 0;
+    color: #333;
+  }
+  
+  .details-grid strong {
+    color: #3f51b5;
+  }
+  
+  .photo img {
+    max-width: 200px;
+    border-radius: 8px;
+    margin-top: 10px;
+  }
+  
+  @media (max-width: 600px) {
+    .details-grid {
+      grid-template-columns: 1fr;
+    }
+  }
