@@ -1,0 +1,39 @@
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: 'Roboto', sans-serif;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+}
+
+.container {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+mat-card {
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+mat-card:hover {
+  transform: translateY(-5px);
+}
+
+button[mat-raised-button] {
+  border-radius: 25px;
+  padding: 8px 24px;
+  font-weight: 500;
+}
+
+mat-form-field {
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+mat-error {
+  font-size: 12px;
+}
