@@ -153,14 +153,14 @@ import { MatButtonModule } from '@angular/material/button';
       align-items: center;
       gap: 8px;
       padding: 10px 20px;
-      background: #808000;
+      background: #6e48aa;
       color: white;
       border-radius: 25px;
       cursor: pointer;
       transition: background-color 0.3s ease;
     }
     .file-label:hover {
-      background: #6b6b00;
+      background: #6e48aa;
     }
     .file-input {
       display: none;
@@ -171,11 +171,11 @@ import { MatButtonModule } from '@angular/material/button';
       justify-content: flex-end;
     }
     button[mat-raised-button][color="primary"] {
-      background: #808000;
+      background: #6e48aa;
       color: white;
     }
     button[mat-raised-button][color="warn"] {
-      background: #808000;
+      background: #6e48aa;
       color: white;
     }
   `],

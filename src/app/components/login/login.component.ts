@@ -76,7 +76,7 @@ import { MatButtonModule } from '@angular/material/button';
       margin-bottom: 20px;
     }
     button[mat-raised-button] {
-      background: #808000; /* Olive green */
+      background: #6e48aa;
       color: white;
       width: 100%;
     }
