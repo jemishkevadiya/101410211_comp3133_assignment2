@@ -1,60 +1,70 @@
-# 101410211Comp3133Assignment2
+# Employee Management System
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.6.
+This is an **Employee Management System** built with **Angular** using a standalone component architecture. The application allows users to manage employee records, including viewing, adding, and editing employee details. It features user authentication (login/signup), Server-Side Rendering (SSR) for improved performance and SEO.
 
-## Development server
+## Table of Contents
 
-To start a local development server, run:
+- [Features](#features)
+- [Technologies Used](#technologies-used)
+- [Project Structure](#project-structure)
 
-```bash
-ng serve
-```
+## Features
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+- **User Authentication**:
+  - Login and signup functionality with email and password.
+  - Protected routes using an `AuthGuard` to restrict access to authenticated users only.
+- **Employee Management**:
+  - View a list of employees.
+  - View details of a specific employee (`employee/:id` route).
+  - Add or edit employee records using a form.
+- **Server-Side Rendering (SSR)**:
+  - Enabled SSR for faster initial page loads and better SEO.
+  - Configured to work with standalone components (no `NgModule`).
+- **Responsive UI**:
+  - Built with Angular Material for a modern, responsive design.
 
-## Code scaffolding
+## Technologies Used
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+- **Angular**: Frontend framework with standalone components.
+- **TypeScript**: For type-safe JavaScript.
+- **Angular Material**: For UI components (e.g., cards, forms, buttons).
+- **RxJS**: For reactive programming and handling HTTP requests.
+- **Zone.js**: For change detection in Angular.
+- **Vite**: Build tool (used by Angular CLI for faster builds).
+- **Render**: Hosting platform for deployment.
+- **Node.js**: Runtime environment (used by Render).
 
-```bash
-ng generate component component-name
-```
+## Project Structure
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+101410211_comp3133_assignment2/
+├── src/
+│   ├── app/
+│   │   ├── components/
+│   │   │   ├── employee-detail/
+│   │   │   ├── employee-form/
+│   │   │   ├── employee-list/
+│   │   │   ├── login/
+│   │   │   └── signup/
+│   │   ├── guards/
+│   │   │   └── auth.guard.ts
+│   │   ├── services/
+│   │   │   └── auth.service.ts
+│   │   └── app.component.ts
+│   ├── main.ts
+│   ├── main.server.ts
+│   ├── server.ts
+│   ├── index.html
+│   └── styles.css
+├── angular.json
+├── package.json
+├── tsconfig.json
+├── tsconfig.app.json
+└── tsconfig.server.json
 
-```bash
-ng generate --help
-```
+## Screen Shots
 
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
-# 101410211_comp3133_assignment2
+![login page](public/login_ss.png)
+![Home page](public/Home_page_ss.png)
+![Add employee](public/add_ss.png)
+![View employee](public/view_ss.png)
+![Edit employee](public/edit_ss.png)
