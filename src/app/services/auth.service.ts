@@ -9,7 +9,7 @@ import { map } from 'rxjs/operators';
 })
 export class AuthService {
   private tokenSubject = new BehaviorSubject<string | null>(null);
-  private apiUrl = 'http://localhost:1024/graphql';
+  private apiUrl = 'https://comp3133-101410211-assignment1.onrender.com/graphql';
 
   constructor(
     private http: HttpClient,

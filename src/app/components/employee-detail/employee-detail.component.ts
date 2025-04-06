@@ -126,7 +126,7 @@ export class EmployeeDetailComponent implements OnInit {
   }
 
   getPhotoUrl(photoPath: string): string {
-    return `http://localhost:1024${photoPath}`;
+    return `https://comp3133-101410211-assignment1.onrender.com${photoPath}`;
   }
 
   onImageError() {
