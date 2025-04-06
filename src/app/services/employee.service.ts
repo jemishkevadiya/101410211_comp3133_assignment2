@@ -1,34 +1,17 @@
-import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
-import { isPlatformBrowser } from '@angular/common';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { client } from '../apollo-client';
+import { gql } from '@apollo/client/core';
 
 @Injectable({
   providedIn: 'root',
 })
 export class EmployeeService {
-  private apiUrl = 'http://localhost:1024/graphql';
-
-  constructor(
-    private http: HttpClient,
-    @Inject(PLATFORM_ID) private platformId: Object 
-  ) {}
-
-  private getAuthHeaders(): HttpHeaders {
-    let token: string | null = null;
-    if (isPlatformBrowser(this.platformId)) {
-      token = localStorage.getItem('token');
-    }
-    return new HttpHeaders({
-      'Content-Type': 'application/json',
-      Authorization: token ? `Bearer ${token}` : '',
-    });
-  }
+  constructor() {}
 
   getAllEmployees(): Observable<any> {
-    const query = `
-      query {
+    const query = gql`
+      query GetAllEmployees {
         getAllEmployees {
           id
           first_name
@@ -43,13 +26,20 @@ export class EmployeeService {
         }
       }
     `;
-    return this.http
-      .post(this.apiUrl, { query }, { headers: this.getAuthHeaders() })
-      .pipe(map((response: any) => response.data.getAllEmployees));
+
+    return new Observable(observer => {
+      client
+        .query({ query })
+        .then(result => {
+          observer.next(result.data.getAllEmployees);
+          observer.complete();
+        })
+        .catch(error => observer.error(error));
+    });
   }
 
   searchEmployeeById(id: string): Observable<any> {
-    const query = `
+    const query = gql`
       query SearchEmployeeById($id: ID!) {
         searchEmployeeById(id: $id) {
           id
@@ -65,13 +55,20 @@ export class EmployeeService {
         }
       }
     `;
-    return this.http
-      .post(this.apiUrl, { query, variables: { id } }, { headers: this.getAuthHeaders() })
-      .pipe(map((response: any) => response.data.searchEmployeeById));
+
+    return new Observable(observer => {
+      client
+        .query({ query, variables: { id } })
+        .then(result => {
+          observer.next(result.data.searchEmployeeById);
+          observer.complete();
+        })
+        .catch(error => observer.error(error));
+    });
   }
 
   searchByDesignationOrDepartment(designation?: string, department?: string): Observable<any> {
-    const query = `
+    const query = gql`
       query SearchEmployeeByDesignationOrDepartment($designation: String, $department: String) {
         searchEmployeeByDesignationOrDepartment(designation: $designation, department: $department) {
           id
@@ -87,13 +84,20 @@ export class EmployeeService {
         }
       }
     `;
-    return this.http
-      .post(this.apiUrl, { query, variables: { designation, department } }, { headers: this.getAuthHeaders() })
-      .pipe(map((response: any) => response.data.searchEmployeeByDesignationOrDepartment));
+
+    return new Observable(observer => {
+      client
+        .query({ query, variables: { designation, department } })
+        .then(result => {
+          observer.next(result.data.searchEmployeeByDesignationOrDepartment);
+          observer.complete();
+        })
+        .catch(error => observer.error(error));
+    });
   }
 
   addEmployee(employee: any, file?: File): Observable<any> {
-    const mutation = `
+    const mutation = gql`
       mutation AddEmployee(
         $first_name: String!
         $last_name: String!
@@ -130,34 +134,38 @@ export class EmployeeService {
       }
     `;
 
-    let token: string | null = null;
-    if (isPlatformBrowser(this.platformId)) {
-      token = localStorage.getItem('token');
-    }
-
-    if (file) {
-      const formData = new FormData();
-      formData.append('operations', JSON.stringify({ query: mutation, variables: employee }));
-      formData.append('map', JSON.stringify({ '0': ['variables.employee_photo'] }));
-      formData.append('0', file);
-      return this.http
-        .post(this.apiUrl, formData, { headers: { Authorization: token ? `Bearer ${token}` : '' } })
-        .pipe(map((response: any) => response.data.addEmployee));
-    }
-
-    return this.http
-      .post(this.apiUrl, { query: mutation, variables: employee }, { headers: this.getAuthHeaders() })
-      .pipe(map((response: any) => response.data.addEmployee));
+    return new Observable(observer => {
+      client
+        .mutate({
+          mutation,
+          variables: {
+            first_name: employee.first_name,
+            last_name: employee.last_name,
+            email: employee.email,
+            gender: employee.gender,
+            designation: employee.designation,
+            salary: employee.salary,
+            date_of_joining: employee.date_of_joining,
+            department: employee.department,
+            employee_photo: file || null,
+          },
+        })
+        .then(result => {
+          observer.next(result.data.addEmployee);
+          observer.complete();
+        })
+        .catch(error => observer.error(error));
+    });
   }
 
   updateEmployee(id: string, employee: any, file?: File): Observable<any> {
-    const mutation = `
+    const mutation = gql`
       mutation UpdateEmployee(
         $id: ID!
         $first_name: String
         $last_name: String
         $email: String
-        $gender: String
+        $gender: String!  # Updated to match schema (required)
         $designation: String
         $salary: Float
         $date_of_joining: String
@@ -190,52 +198,54 @@ export class EmployeeService {
       }
     `;
 
-    console.log('Updating employee with variables:', { id, ...employee, employee_photo: file });
-
-    let token: string | null = null;
-    if (isPlatformBrowser(this.platformId)) {
-      token = localStorage.getItem('token');
+    if (!employee.gender) {
+      throw new Error('Gender is required for updating an employee');
     }
-
-    if (file) {
-      const formData = new FormData();
-      formData.append('operations', JSON.stringify({ query: mutation, variables: { id, ...employee } }));
-      formData.append('map', JSON.stringify({ '0': ['variables.employee_photo'] }));
-      formData.append('0', file);
-      return this.http
-        .post(this.apiUrl, formData, { headers: { Authorization: token ? `Bearer ${token}` : '' } })
-        .pipe(
-          map((response: any) => {
-            console.log('Update response:', response);
-            if (response.errors) {
-              throw new Error(response.errors[0].message);
-            }
-            return response.data.updateEmployee;
-          })
-        );
-    }
-
-    return this.http
-      .post(this.apiUrl, { query: mutation, variables: { id, ...employee } }, { headers: this.getAuthHeaders() })
-      .pipe(
-        map((response: any) => {
-          console.log('Update response:', response);
-          if (response.errors) {
-            throw new Error(response.errors[0].message);
-          }
-          return response.data.updateEmployee;
+  
+    return new Observable(observer => {
+      client
+        .mutate({
+          mutation,
+          variables: {
+            id,
+            first_name: employee.first_name,
+            last_name: employee.last_name,
+            email: employee.email,
+            gender: employee.gender,
+            designation: employee.designation,
+            salary: employee.salary,
+            date_of_joining: employee.date_of_joining,
+            department: employee.department,
+            employee_photo: file || null,
+          },
         })
-      );
+        .then(result => {
+          observer.next(result.data.updateEmployee);
+          observer.complete();
+        })
+        .catch(error => {
+          console.error('Apollo error:', error); 
+          const errorMessage = error.message || 'Failed to update employee';
+          observer.error(new Error(errorMessage));
+        });
+    });
   }
 
   deleteEmployee(id: string): Observable<any> {
-    const mutation = `
+    const mutation = gql`
       mutation DeleteEmployee($id: ID!) {
         deleteEmployee(id: $id)
       }
     `;
-    return this.http
-      .post(this.apiUrl, { query: mutation, variables: { id } }, { headers: this.getAuthHeaders() })
-      .pipe(map((response: any) => response.data.deleteEmployee));
+
+    return new Observable(observer => {
+      client
+        .mutate({ mutation, variables: { id } })
+        .then(result => {
+          observer.next(result.data.deleteEmployee);
+          observer.complete();
+        })
+        .catch(error => observer.error(error));
+    });
   }
 }
